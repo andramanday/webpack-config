@@ -1,11 +1,18 @@
+const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const target = process.env.NODE_ENV === "production" ? "browserslist" : "web";
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Target = process.env.NODE_ENV === "production" ? "browserslist" : "web";
 const devTool = process.env.NODE_ENV === "production" ? "source-map" : "eval";
 
 module.exports = {
-    target: target,
+    mode: process.env.NODE_ENV,
+    target: Target,
     devtool: devTool,
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        assetModuleFilename: "images/[hash][ext][query]"
+    },
     module: {
         rules: [{
                 test: /\.jsx?$/,
@@ -22,6 +29,10 @@ module.exports = {
                     "postcss-loader",
                     "sass-loader"
                 ]
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                type: "asset"
             }
         ],
     },
@@ -29,14 +40,14 @@ module.exports = {
         extensions: ['.js', '.jsx'],
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new MiniCssExtractPlugin(),
         new HtmlWebPackPlugin({
-            template: "./src/index.html",
-            filename: "./index.html"
+            template: "./src/index.html"
         })
     ],
     devServer: {
-        contentBase: "./dist",
+        // contentBase: "./dist",
         port: 3000,
         hot: true
     }
