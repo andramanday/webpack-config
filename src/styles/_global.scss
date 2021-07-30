@@ -1,0 +1,9 @@
+@use "variables";
+body {
+    margin: 0;
+    background-color: variables.$bg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text);
+}
